@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1725537160 source:c:\users\190892\cprojects\elso\main.c
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+
