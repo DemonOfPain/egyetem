@@ -5,7 +5,7 @@
 int main()
 {
     //1.hello world!
-    printf("Hello world!\n");
+    printf("Hello world!\n")
 
 
     //5.tartaly
