@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1726139276 source:c:\users\bálint\desktop\egyetem\masodik\main.c
+	<stdio.h>
+	<math.h>
+	<stdbool.h>
+
