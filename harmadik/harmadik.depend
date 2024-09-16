@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1726522737 source:c:\egyetem\harmadik\main.c
+	<stdio.h>
+	<math.h>
+
