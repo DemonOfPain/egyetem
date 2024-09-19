@@ -9,7 +9,7 @@ double abszolut(double x);
 int maganhangzoe(char c);
 
 typedef struct Pont {
-    float x, y;
+    double x, y;
 } Pont;
 
 typedef struct Datum {
@@ -39,6 +39,11 @@ void pontok(void);
 void adatszerkezetek(void);
 //6.
 void menuvezerelt(void);
+
+int alapertekVissza (int x);
+int pluszEgy (int x);
+int negalas (int x);
+int szorKetto (int x);
 //----------
 
 int main(void) {
@@ -98,7 +103,7 @@ void versenyzo_kiir(Versenyzo v) {
 
 //feladatok:
 void tombfrissito(void) {
-    double szamok[10] = { 2.5, -69, 5.4, -8, -7.7, 6, 2.9, -10, -3, 9.8 };
+    double szamok[10] = { -2.5, -69, 5.4, -8, -7.7, 6, 2.9, -10, -3, 9.8 };
     int negativak[10] = {0};
     int negativakSzama = 0;
 
@@ -119,7 +124,7 @@ void tombfrissito(void) {
     printf("Ebbol %d szam negativ.\n", negativakSzama);
 
     for(int i = 0; i < negativakSzama; i++) {
-        printf("[%d]=%f ", negativak[i], szamok[negativak[i]]);
+        printf("[%d]=%.1f ", negativak[i], szamok[negativak[i]]);
     }
 }
 
@@ -153,11 +158,11 @@ void pontok(void) {
     Pont pont2;
 
     printf("Add meg az x koordinatat: ");
-    scanf("%f", &pont2.x);
+    scanf("%lf", &pont2.x);
     printf("Add meg az y koordinatat: ");
-    scanf("%f", &pont2.y);
+    scanf("%lf", &pont2.y);
 
-    Pont pontFelezo = {(pont1.x + pont2.x) / 2, (pont1.y + pont2.y) / 2};
+    Pont pontFelezo = {(pont1.x + pont2.x) / 2.0, (pont1.y + pont2.y) / 2.0};
     printf("A felezo:\nx: %f\ny: %f", pontFelezo.x, pontFelezo.y);
 }
 
@@ -220,16 +225,16 @@ void menuvezerelt(void) {
 
         switch(menupont) {
         case 0:
-            a = 1;
+            a = alapertekVissza(1);
             break;
         case 1:
-            a++;
+            a = pluszEgy(a);
             break;
         case 2:
-            a = -a;
+            a = negalas(a);
             break;
         case 3:
-            a *= 2;
+            a = szorKetto(a);
             break;
         case 9:
             menufut = false;
@@ -241,4 +246,15 @@ void menuvezerelt(void) {
 
 }
 
-
+int alapertekVissza(int alapertek) {
+    return alapertek;
+}
+int pluszEgy(int szam) {
+    return szam + 1;
+}
+int negalas(int szam) {
+    return -szam;
+}
+int szorKetto(int szam) {
+    return szam * 2;
+}
