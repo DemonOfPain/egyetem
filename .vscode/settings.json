@@ -1,0 +1,8 @@
+{
+  "C_Cpp.default.compilerPath": "c:\\MinGW\\bin\\gcc.exe",
+  "editor.formatOnSave": true,
+  "files.associations": {
+    "menu.h": "c"
+  }
+  // "clang-format.executable": "/absolute/path/to/clang-format"
+}
