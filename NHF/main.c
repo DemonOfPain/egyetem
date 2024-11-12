@@ -6,7 +6,7 @@ int main(){
     foMenuKiir();
 
     int a;
-    while (scanf("%d", &a), a!=-1)
+    while (scanf("%d", &a) && a!=-1)
     {
         system("@cls");
         foMenuKiir();
