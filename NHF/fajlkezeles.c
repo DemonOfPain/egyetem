@@ -9,6 +9,7 @@ typedef struct Asztal
     int pozX;
     int pozY;
     int fo;
+    int foglaltsag;
 } Asztal;
 
 typedef struct Etel
@@ -56,7 +57,7 @@ Asztal *asztalokBeolvas(int *asztalokListaHossz)
             free(asztalok);
             return NULL;
         }
-
+        beolvasott.foglaltsag = 0;
         asztalok[i] = beolvasott;
         i++;
     }
@@ -135,8 +136,7 @@ Etelcsoport *kajamenuBeolvas(int **meretekLista, int *meretekListaHossz)
         if (fscanf(menuFajl, "%d", &ar) != 1)
             break;
 
-        Etel *ujEtelek = realloc(menu[etelcsoportId].etelek,
-                                 (meretek[etelcsoportId] + 1) * sizeof(Etel));
+        Etel *ujEtelek = realloc(menu[etelcsoportId].etelek, (meretek[etelcsoportId] + 1) * sizeof(Etel));
         if (ujEtelek == NULL)
             break;
 

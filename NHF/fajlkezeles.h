@@ -1,6 +1,8 @@
 #ifndef FAJLKEZELES_H
 #define FAJLKEZELES_H
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "debugmalloc.h"
 
 typedef struct Asztal
@@ -8,6 +10,7 @@ typedef struct Asztal
     int pozX;
     int pozY;
     int fo;
+    int foglaltsag;
 } Asztal;
 
 typedef struct Etel
