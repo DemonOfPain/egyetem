@@ -26,7 +26,7 @@ void fomenuKiir(void)
     printf("7. Kilep\n");
 }
 
-int fomenu(Asztal *asztalok, int asztalokHossz, Etelcsoport *menu, int *meretek, int meretekHossz)
+int fomenu(Asztal **asztalok, int *asztalokHossz, Etelcsoport *menu, int *meretek, int meretekHossz)
 {
     system("@cls");
     fomenuKiir();
@@ -43,13 +43,15 @@ int fomenu(Asztal *asztalok, int asztalokHossz, Etelcsoport *menu, int *meretek,
     switch (menupont)
     {
     case 1:
+
         asztalokMegadasa(asztalok, asztalokHossz);
+        system("pause");
         return 1;
     case 2:
         kajaMenu(menu, meretek, meretekHossz);
         return 1;
     case 3:
-        int r = asztalFoglalasok(asztalok, asztalokHossz);
+        int r = asztalFoglalasok(*asztalok, *asztalokHossz);
         if (r == 1)
         {
             printf(RED "Hibas parameterek!\n" WHITE);
@@ -64,7 +66,7 @@ int fomenu(Asztal *asztalok, int asztalokHossz, Etelcsoport *menu, int *meretek,
         szamlaKiir();
         return 1;
     case 6:
-        foglaltsagiTerkepKiir(asztalok, asztalokHossz);
+        foglaltsagiTerkepKiir(*asztalok, *asztalokHossz);
         return 1;
     case 7:
         return 0;

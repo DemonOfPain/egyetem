@@ -17,7 +17,7 @@ int main()
     int fomenuFut = 1;
     while (fomenuFut)
     {
-        fomenuFut = fomenu(asztalok, asztalokHossz, menu, meretek, meretekHossz);
+        fomenuFut = fomenu(&asztalok, &asztalokHossz, menu, meretek, meretekHossz);
     }
 
     // mallocok felszabaditasa

@@ -5,6 +5,6 @@
 #include "fajlkezeles.h"
 
 void fomenuKiir(void);
-int fomenu(Asztal *asztalok, int asztalokHossz, Etelcsoport *menu, int *meretek, int meretekHossz);
+int fomenu(Asztal **asztalok, int *asztalokHossz, Etelcsoport *menu, int *meretek, int meretekHossz);
 
 #endif

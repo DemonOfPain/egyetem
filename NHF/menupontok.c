@@ -8,10 +8,53 @@
 #define RED "\033[0;31m"
 #define GREEN "\033[0;32m"
 
-int asztalokMegadasa(void)
+int asztalokMegadasa(Asztal **asztalok, int *asztalokHossz)
 {
     system("@cls");
     printf(YELLOW "Asztalok megadasa\n" WHITE);
+
+    int x;
+    int y;
+    int fo;
+
+    if (scanf("%d %d %d", &x, &y, &fo) < 3)
+    {
+        return 1;
+    }
+
+    for (int i = 0; i < *asztalokHossz; i++)
+    {
+        if ((*asztalok)[i].pozX == x && (*asztalok)[i].pozY == y)
+        {
+            char valasz;
+            printf("Ezen a pozicion mar van asztal, felulirod? (i/n) ");
+            scanf(" %c", &valasz);
+            if (valasz == 'i')
+            {
+                (*asztalok)[i].pozX = x;
+                (*asztalok)[i].pozY = y;
+                (*asztalok)[i].fo = fo;
+                (*asztalok)[i].foglaltsag = 0;
+
+                printf("Asztal id: %d felulirva, uj ertekek:\n\tkoordinatak: %d %d\n\tfo: %d\n\tfoglaltsag: szabad\n", i, x, y, fo);
+
+                return 0;
+            }
+            else
+            {
+                printf(RED "Hibas valasz!" WHITE);
+            }
+        }
+    }
+    // nincs ellenorzes de statisztikailag kizart hogy ne legyen ra memoria
+    *asztalok = realloc(*asztalok, (*asztalokHossz + 1) * sizeof(Asztal));
+    (*asztalok)[*asztalokHossz].pozX = x;
+    (*asztalok)[*asztalokHossz].pozY = y;
+    (*asztalok)[*asztalokHossz].fo = fo;
+    (*asztalok)[*asztalokHossz].foglaltsag = 0;
+    (*asztalokHossz)++;
+    printf("Asztal id: %d felveve, ertekek:\n\tkoordinatak: %d %d\n\tfo: %d\n\tfoglaltsag: szabad\n", *asztalokHossz - 1, x, y, fo);
+
     return 0;
 }
 
@@ -91,6 +134,8 @@ int foglaltsagiTerkepKiir(Asztal *asztalok, int asztalokHossz)
     system("@cls");
     printf(YELLOW "Foglaltsagi terkep\n" WHITE);
 
+    system("pause");
+
     int xMax = 0;
     int yMax = 0;
     for (int i = 0; i < asztalokHossz; i++)
@@ -99,12 +144,11 @@ int foglaltsagiTerkepKiir(Asztal *asztalok, int asztalokHossz)
         yMax = asztalok[i].pozY > yMax ? asztalok[i].pozY : yMax;
     }
 
-    int printed = 0;
-    printf("xmax: %d\nymax: %d\nasztalokhossz: %d\n", xMax, yMax, asztalokHossz);
     for (int sor = 0; sor <= yMax; sor++)
     {
         for (int oszlop = 0; oszlop <= xMax; oszlop++)
         {
+            int printed = 0;
             for (int i = 0; i < asztalokHossz; i++)
             {
                 if (asztalok[i].pozX == oszlop && asztalok[i].pozY == sor)
@@ -112,25 +156,23 @@ int foglaltsagiTerkepKiir(Asztal *asztalok, int asztalokHossz)
                     if (asztalok[i].foglaltsag == 1)
                     {
                         printf(RED "%d ", i);
-                        printed = 1;
-                        break;
                     }
                     else
                     {
                         printf(GREEN "%d ", i);
-                        printed = 1;
-                        break;
                     }
+
+                    printed = 1;
+                    break;
                 }
             }
             if (!printed)
             {
                 printf("- ");
-                printed = 0;
             }
+            printed = 0;
         }
         printf(WHITE "\n\n");
-        printed = 0;
     }
 
     system("pause");

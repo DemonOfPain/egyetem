@@ -4,7 +4,7 @@
 
 #include "fajlkezeles.h"
 
-int asztalokMegadasa(Asztal *asztalok, int asztalokHossz);
+int asztalokMegadasa(Asztal **asztalok, int *asztalokHossz);
 int kajaMenu(Etelcsoport *menu, int *meretek, int meretekHossz);
 int asztalFoglalasok(Asztal *asztalok, int asztalokHossz);
 int rendelesek(void);
