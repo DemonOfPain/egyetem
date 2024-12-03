@@ -2,11 +2,15 @@
 #include <windows.h>
 
 #include "fajlkezeles.h"
+#include "structs.h"
 
 #define YELLOW "\033[0;33m"
+#define LIGHT_YELLOW "\033[38;2;255;255;192m"
 #define WHITE "\033[0;37m"
 #define RED "\033[0;31m"
+#define LIGHT_RED "\033[38;2;255;224;224m"
 #define GREEN "\033[0;32m"
+#define LIGHT_GREEN "\033[38;2;224;255;224m"
 
 int asztalokMegadasa(Asztal **asztalok, int *asztalokHossz)
 {
@@ -22,74 +26,238 @@ int asztalokMegadasa(Asztal **asztalok, int *asztalokHossz)
         return 1;
     }
 
-    for (int i = 0; i < *asztalokHossz; i++)
+    if (x < 0 || y < 0 || fo < 1)
     {
-        if ((*asztalok)[i].pozX == x && (*asztalok)[i].pozY == y)
+        return 1;
+    }
+
+    if (*asztalok)
+    {
+        for (int i = 0; i < *asztalokHossz; i++)
         {
-            char valasz;
-            printf("Ezen a pozicion mar van asztal, felulirod? (i/n) ");
-            scanf(" %c", &valasz);
-            if (valasz == 'i')
+            if ((*asztalok)[i].pozX == x && (*asztalok)[i].pozY == y)
             {
-                (*asztalok)[i].pozX = x;
-                (*asztalok)[i].pozY = y;
-                (*asztalok)[i].fo = fo;
-                (*asztalok)[i].foglaltsag = 0;
+                char valasz;
+                printf(LIGHT_RED "Ezen a pozicion mar van asztal, felulirod? (i/n) " WHITE);
+                scanf(" %c", &valasz);
+                if (valasz == 'i')
+                {
+                    (*asztalok)[i].pozX = x;
+                    (*asztalok)[i].pozY = y;
+                    (*asztalok)[i].fo = fo;
+                    (*asztalok)[i].foglaltsag = 0;
 
-                printf("Asztal id: %d felulirva, uj ertekek:\n\tkoordinatak: %d %d\n\tfo: %d\n\tfoglaltsag: szabad\n", i, x, y, fo);
-
-                return 0;
-            }
-            else
-            {
-                printf(RED "Hibas valasz!" WHITE);
+                    printf("Asztal id: %d felulirva, uj ertekek:\n\tkoordinatak: %d %d\n\tfo: %d\n\tfoglaltsag: szabad\n", i, x, y, fo);
+                    if (asztalokMent(*asztalok, *asztalokHossz))
+                    {
+                        printf(RED "Asztalok mentese sikertelen!" WHITE);
+                    }
+                    return 0;
+                }
+                else
+                {
+                    printf(RED "Hibas valasz!" WHITE);
+                }
             }
         }
     }
     // nincs ellenorzes de statisztikailag kizart hogy ne legyen ra memoria
-    *asztalok = realloc(*asztalok, (*asztalokHossz + 1) * sizeof(Asztal));
+    *asztalok = *asztalok ? realloc(*asztalok, (*asztalokHossz + 1) * sizeof(Asztal)) : malloc(sizeof(Asztal));
     (*asztalok)[*asztalokHossz].pozX = x;
     (*asztalok)[*asztalokHossz].pozY = y;
     (*asztalok)[*asztalokHossz].fo = fo;
     (*asztalok)[*asztalokHossz].foglaltsag = 0;
     (*asztalokHossz)++;
-    printf("Asztal id: %d felveve, ertekek:\n\tkoordinatak: %d %d\n\tfo: %d\n\tfoglaltsag: szabad\n", *asztalokHossz - 1, x, y, fo);
+    printf("Asztal id: %d felveve, ertekek:\n\tkoordinatak: %d %d\n\tfo: %d\n\tfoglaltsag: szabad\n",
+           *asztalokHossz - 1, x, y, fo);
 
-    return 0;
-}
-
-int kajaMenu(Etelcsoport *menu, int *meretek, int meretekHossz)
-{
-    system("@cls");
-    printf(YELLOW "Menu\n" WHITE);
-    printf("1. Menu kiir\n");
-    printf("2. Etelcsoport megadasa\n");
-    printf("3. Etel megadasa\n");
-
-    int valasztas = 0;
-    scanf("%d", &valasztas);
-
-    switch (valasztas)
+    if (asztalokMent(*asztalok, *asztalokHossz))
     {
-    case 1:
-        for (int i = 0; i < meretekHossz; i++)
-        {
-            printf("Etelcsoport: %s\n", menu[i].etelcsoportNev);
-            for (int j = 0; j < meretek[i]; j++)
-            {
-                printf("  Etel: %s, Ar: %d\n", menu[i].etelek[j].etelNev, menu[i].etelek[j].ar);
-            }
-        }
-        system("pause");
-    case 2:
-
-    case 3:
+        printf(RED "Asztalok mentese sikertelen!" WHITE);
     }
     return 0;
 }
 
+int kajaMenu(Etelcsoport **menu, int **meretek, int *meretekHossz)
+{
+    system("@cls");
+    printf(YELLOW "Menu\n" WHITE);
+    printf(LIGHT_YELLOW "1. Menu kiir\n");
+    printf("2. Etelcsoport megadasa\n");
+    printf("3. Etel megadasa\n");
+    printf(LIGHT_RED "4. Kilepes\n" WHITE);
+
+    int valasztas = 0;
+
+    while (!valasztas)
+    {
+        if (scanf("%d", &valasztas) != 1 || valasztas < 1 || valasztas > 4)
+        {
+            printf(RED "Helytelen menupont!\n" WHITE);
+            printf("Adj meg egy menupontot 1 és 4 kozott: ");
+            valasztas = 0;
+        }
+    }
+
+    switch (valasztas)
+    {
+    case 1:
+        if (!*menu)
+        {
+            printf("Nincsen meg menu!\n");
+            system("pause");
+            return 0;
+        }
+        system("@cls");
+        printf(YELLOW "MENU\n" WHITE);
+        for (int i = 0; i < *meretekHossz; i++)
+        {
+            printf("\nEtelcsoport: %s\n", (*menu)[i].etelcsoportNev);
+            for (int j = 0; j < (*meretek)[i]; j++)
+            {
+                printf("\tEtel: %s, Ar: %d\n", (*menu)[i].etelek[j].etelNev, (*menu)[i].etelek[j].ar);
+            }
+        }
+        system("pause");
+        return 0;
+
+    case 2:
+        system("@cls");
+        printf(YELLOW "Etelcsoportok megadasa\n" WHITE);
+        printf("(ird be hogy \"kilep\" a kilepeshez)\n");
+        char beolvasottCsop[50 + 1];
+
+        int safetyGuard = 0;
+        while (safetyGuard < 500)
+        {
+            fflush(stdin);
+            printf("\nAdd meg az etelcsoport nevet: ");
+
+            if (fgets(beolvasottCsop, sizeof(beolvasottCsop), stdin) != NULL)
+            {
+                if (beolvasottCsop[strlen(beolvasottCsop) - 1] == '\n')
+                {
+                    beolvasottCsop[strlen(beolvasottCsop) - 1] = '\0';
+                }
+
+                if (strcmp(beolvasottCsop, "kilep") == 0)
+                {
+                    return 0;
+                }
+
+                int letezik = 0;
+                for (int i = 0; i < *meretekHossz; i++)
+                {
+                    if (strcmp((*menu)[i].etelcsoportNev, beolvasottCsop) == 0)
+                    {
+                        printf(RED "Ez az etelcsoport mar letezik!\n" WHITE);
+                        letezik = 1;
+                        system("pause");
+                        break;
+                    }
+                }
+                if (letezik)
+                {
+                    continue;
+                }
+
+                *menu = *menu ? realloc(*menu, (*meretekHossz + 1) * sizeof(Etelcsoport)) : malloc(sizeof(Etelcsoport));
+                *meretek = *meretek ? realloc(*meretek, (*meretekHossz + 1) * sizeof(int)) : malloc(sizeof(int));
+
+                strcpy((*menu)[*meretekHossz].etelcsoportNev, beolvasottCsop);
+                (*menu)[*meretekHossz].etelek = NULL;
+                (*meretek)[*meretekHossz] = 0;
+                (*meretekHossz)++;
+
+                printf(GREEN "Etelcsoport sikeresen hozzaadva!\n" WHITE);
+                if (kajamenuMent(*menu, *meretek, *meretekHossz))
+                {
+                    printf(RED "Menu mentese sikertelen!" WHITE);
+                }
+            }
+            safetyGuard++;
+        }
+        return 0;
+
+    case 3:
+        if (!*menu)
+        {
+            printf(RED "Nincsen meg menu!\n" WHITE);
+            system("pause");
+            return 0;
+        }
+        system("@cls");
+        printf(YELLOW "Etelcsoportok:\n" WHITE);
+        for (int i = 0; i < *meretekHossz; i++)
+        {
+            printf("%d. %s\n" WHITE, i + 1, (*menu)[i].etelcsoportNev);
+        }
+        printf("\nValaszd ki az etelcsoportot (-1 a kilepeshez): ");
+
+        int csopId;
+        scanf("%d", &csopId);
+        csopId--;
+        fflush(stdin);
+
+        if (csopId < 0 || csopId >= *meretekHossz)
+        {
+            printf(RED "Ervenytelen valasztas!\n" WHITE);
+            system("pause");
+            return 0;
+        }
+
+        char etelNev[50 + 1];
+        int ar = 0;
+        printf("Add meg az etel nevet: ");
+
+        if (fgets(etelNev, sizeof(etelNev), stdin) != NULL)
+        {
+            if (etelNev[strlen(etelNev) - 1] == '\n')
+            {
+                etelNev[strlen(etelNev) - 1] = '\0';
+            }
+
+            printf("Add meg az etel arat: ");
+            scanf("%d", &ar);
+            if (ar <= 0)
+            {
+                return 1;
+            }
+
+            (*menu)[csopId].etelek = (*menu)[csopId].etelek ? realloc((*menu)[csopId].etelek, ((*meretek)[csopId] + 1) * sizeof(Etel)) : malloc(sizeof(Etel));
+
+            strcpy((*menu)[csopId].etelek[(*meretek)[csopId]].etelNev, etelNev);
+            (*menu)[csopId].etelek[(*meretek)[csopId]].ar = ar;
+            (*meretek)[csopId]++;
+
+            printf(GREEN "Etel sikeresen hozzaadva!\n" WHITE);
+            fflush(stdin);
+            if (kajamenuMent(*menu, *meretek, *meretekHossz))
+            {
+                printf(RED "Menu mentese sikertelen!" WHITE);
+            }
+            system("pause");
+        }
+        else
+        {
+            return 1;
+        }
+        return 0;
+
+    case 4:
+        return 0;
+    }
+}
+
 int asztalFoglalasok(Asztal *asztalok, int asztalokHossz)
 {
+    if (!asztalok)
+    {
+        printf(RED "Nincsenek meg asztalok!" WHITE);
+        system("pause");
+        return 0;
+    }
+
     system("@cls");
     printf(YELLOW "Asztal foglalasok\n" WHITE);
     printf("A kovetkezokeppen adjad meg a parametereket:");
@@ -105,7 +273,10 @@ int asztalFoglalasok(Asztal *asztalok, int asztalokHossz)
     {
         asztalok[asztalId].foglaltsag = foglaltsag;
 
-        printf("Asztal id: %d, uj foglaltsaga: %s.\n", asztalId, foglaltsag ? "foglalt" : "szabad");
+        printf("Asztal id: " WHITE "%d"
+               ", uj foglaltsaga: " WHITE "%s"
+               ".\n" WHITE,
+               asztalId, foglaltsag ? "foglalt" : "szabad");
         system("pause");
         return 0;
     }
@@ -115,17 +286,18 @@ int asztalFoglalasok(Asztal *asztalok, int asztalokHossz)
     }
 }
 
-int rendelesek(void)
+int rendelesFelvetel(void)
 {
     system("@cls");
-    printf("Rendelesek\n");
+    printf(YELLOW "Rendelesek\n" WHITE);
+
     return 0;
 }
 
 int szamlaKiir(void)
 {
     system("@cls");
-    printf("5. Szamla kiirasa\n");
+    printf(YELLOW "5. Szamla kiirasa\n" WHITE);
     return 0;
 }
 
@@ -133,8 +305,12 @@ int foglaltsagiTerkepKiir(Asztal *asztalok, int asztalokHossz)
 {
     system("@cls");
     printf(YELLOW "Foglaltsagi terkep\n" WHITE);
-
-    system("pause");
+    if (!asztalok)
+    {
+        printf(RED "Nincsenek meg asztalok!\n" WHITE);
+        system("pause");
+        return 0;
+    }
 
     int xMax = 0;
     int yMax = 0;
@@ -168,7 +344,7 @@ int foglaltsagiTerkepKiir(Asztal *asztalok, int asztalokHossz)
             }
             if (!printed)
             {
-                printf("- ");
+                printf("  ");
             }
             printed = 0;
         }

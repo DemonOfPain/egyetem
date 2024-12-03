@@ -3,7 +3,8 @@
   "editor.formatOnSave": true,
   "files.associations": {
     "menu.h": "c",
-    "stdio.h": "c"
+    "stdio.h": "c",
+    "debugmalloc.h": "c"
   },
   "clang-format.executable": "C:\\Users\\Bálint\\.vscode\\extensions\\xaver.clang-format-1.9.0"
 }

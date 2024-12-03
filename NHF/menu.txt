@@ -1,14 +1,6 @@
-3 
-foetelek
-desszertek
-szuflek
-3
-0
-rakott krumpli
-1500
-0
-parizsi al a mayoneze
-10
 1
+ecet
+1
+0
 ecetes tojas
-30000
+102
