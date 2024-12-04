@@ -52,6 +52,7 @@ int asztalokMegadasa(Asztal **asztalok, int *asztalokHossz)
                     {
                         printf(RED "Asztalok mentese sikertelen!" WHITE);
                     }
+                    system("pause");
                     return 0;
                 }
                 else
@@ -75,6 +76,7 @@ int asztalokMegadasa(Asztal **asztalok, int *asztalokHossz)
     {
         printf(RED "Asztalok mentese sikertelen!" WHITE);
     }
+    system("pause");
     return 0;
 }
 
@@ -261,8 +263,8 @@ int asztalFoglalasok(Asztal *asztalok, int asztalokHossz)
     system("@cls");
     printf(YELLOW "Asztal foglalasok\n" WHITE);
     printf("A kovetkezokeppen adjad meg a parametereket:");
-    printf("asztalid foglaltsag (szokozzel elvalasztva!) Ha a foglaltsag 1 akkor foglalt ha 0 akkor szabad.");
-    printf("A foglaltsag mindig az uj megadott lesz, meg ha meg is egyezik a regivel.\n");
+    printf("asztalid foglaltsag (szokozzel elvalasztva!)\nHa a foglaltsag 1 akkor foglalt ha 0 akkor szabad.");
+    printf("\nA foglaltsag mindig az uj megadott lesz, meg ha meg is egyezik a regivel.\n");
 
     int asztalId = -1;
     int foglaltsag = -1;
@@ -286,18 +288,228 @@ int asztalFoglalasok(Asztal *asztalok, int asztalokHossz)
     }
 }
 
-int rendelesFelvetel(void)
+int rendelesFelvetel(Rendeles **rendelesek, int *rendelesekHossz, Etelcsoport *menu, int *meretek, int meretekHossz)
 {
     system("@cls");
     printf(YELLOW "Rendelesek\n" WHITE);
 
+    if (!menu)
+    {
+        printf(RED "Nincsen meg menu!\n" WHITE);
+        system("pause");
+        return 0;
+    }
+
+    printf("Add meg az asztal ID-t: ");
+    int asztalId;
+    scanf("%d", &asztalId);
+
+    if (asztalId < 0)
+    {
+        printf(RED "Ervenytelen asztal ID!\n" WHITE);
+        system("pause");
+        return 1;
+    }
+
+    int osszEtelSzam = 0;
+    for (int i = 0; i < meretekHossz; i++)
+    {
+        osszEtelSzam += meretek[i];
+    }
+
+    Rendeles ujRendeles;
+    ujRendeles.asztalId = asztalId;
+    ujRendeles.etelek = malloc((osszEtelSzam + 1) * sizeof(int)); // +1 for sentinel
+    ujRendeles.db = malloc((osszEtelSzam + 1) * sizeof(int));
+
+    for (int i = 0; i < osszEtelSzam + 1; i++) // Initialize everything including sentinel
+    {
+        ujRendeles.etelek[i] = -1; // All elements start as sentinel
+        ujRendeles.db[i] = 0;
+    }
+
+    int etelIndex = 0;
+    int valasztottEtel;
+
+    do
+    {
+        system("@cls");
+        printf(YELLOW "MENU\n" WHITE);
+
+        int etelSorszam = 1;
+        for (int i = 0; i < meretekHossz; i++)
+        {
+            printf("\n%s:\n", menu[i].etelcsoportNev);
+            for (int j = 0; j < meretek[i]; j++)
+            {
+                printf("%d. %s - %d Ft\n", etelSorszam, menu[i].etelek[j].etelNev, menu[i].etelek[j].ar);
+                etelSorszam++;
+            }
+        }
+
+        printf("\nJelenlegi rendeles:\n");
+        int vanRendeles = 0;
+        for (int i = 0; ujRendeles.etelek[i] != -1; i++)
+        {
+            if (ujRendeles.db[i] > 0)
+            {
+                int tempSorszam = 0;
+                for (int j = 0; j < meretekHossz; j++)
+                {
+                    for (int k = 0; k < meretek[j]; k++)
+                    {
+                        if (tempSorszam == ujRendeles.etelek[i])
+                        {
+                            printf("\t%s - %dx\n", menu[j].etelek[k].etelNev, ujRendeles.db[i]);
+                            vanRendeles = 1;
+                        }
+                        tempSorszam++;
+                    }
+                }
+            }
+        }
+        if (!vanRendeles)
+        {
+            printf("(meg ures)\n");
+        }
+
+        printf("\nValassz etelt (1-%d), vagy -1 a befejezeshez: ", etelSorszam - 1);
+        scanf("%d", &valasztottEtel);
+
+        if (valasztottEtel >= 1 && valasztottEtel < etelSorszam)
+        {
+            int letezo = -1;
+            for (int i = 0; ujRendeles.etelek[i] != -1; i++)
+            {
+                if (ujRendeles.etelek[i] == valasztottEtel - 1)
+                {
+                    letezo = i;
+                    break;
+                }
+            }
+
+            if (letezo >= 0)
+            {
+                ujRendeles.db[letezo]++;
+                printf(GREEN "Etel hozzaadva!\n" WHITE);
+            }
+            else
+            {
+                ujRendeles.etelek[etelIndex] = valasztottEtel - 1;
+                ujRendeles.db[etelIndex] = 1;
+                etelIndex++;
+                printf(GREEN "Etel hozzaadva!\n" WHITE);
+            }
+            system("pause");
+        }
+        else if (valasztottEtel != -1)
+        {
+            printf(RED "Hibas etel sorszam!\n" WHITE);
+            system("pause");
+        }
+
+    } while (valasztottEtel != -1);
+
+    if (etelIndex > 0)
+    {
+        *rendelesek = *rendelesek ? realloc(*rendelesek, (*rendelesekHossz + 1) * sizeof(Rendeles)) : malloc(sizeof(Rendeles));
+        (*rendelesek)[*rendelesekHossz] = ujRendeles;
+        (*rendelesekHossz)++;
+        printf(GREEN "Rendeles rogzitve!\n" WHITE);
+    }
+    else
+    {
+        free(ujRendeles.etelek);
+        free(ujRendeles.db);
+    }
+
+    system("pause");
     return 0;
 }
 
-int szamlaKiir(void)
+int szamlaKiir(Rendeles *rendelesek, int rendelesekHossz, Etelcsoport *menu, int *meretek, int meretekHossz)
 {
     system("@cls");
-    printf(YELLOW "5. Szamla kiirasa\n" WHITE);
+    printf(YELLOW "Szamla kiirasa\n" WHITE);
+
+    if (!rendelesek || !menu)
+    {
+        printf(RED "Nincsenek rendelesek vagy nincs menu!\n" WHITE);
+        system("pause");
+        return 0;
+    }
+
+    printf("Add meg az asztal ID-t: ");
+    int asztalId;
+    scanf("%d", &asztalId);
+
+    if (asztalId < 0)
+    {
+        printf(RED "Ervenytelen asztal ID!\n" WHITE);
+        system("pause");
+        return 1;
+    }
+
+    system("@cls");
+    printf(YELLOW "SZAMLA - Asztal %d\n\n" WHITE, asztalId);
+
+    int osszeg = 0;
+    int vanRendeles = 0;
+
+    for (int i = 0; i < rendelesekHossz; i++)
+    {
+        if (rendelesek[i].asztalId == asztalId)
+        {
+            vanRendeles = 1;
+            for (int j = 0; rendelesek[i].etelek[j] != -1; j++)
+            {
+                if (rendelesek[i].db[j] > 0)
+                {
+                    int etelIndex = rendelesek[i].etelek[j];
+                    int tempIndex = 0;
+
+                    for (int m = 0; m < meretekHossz; m++)
+                    {
+                        for (int n = 0; n < meretek[m]; n++)
+                        {
+                            if (tempIndex == etelIndex)
+                            {
+                                int etelAr = menu[m].etelek[n].ar * rendelesek[i].db[j];
+                                printf("%dx %s", rendelesek[i].db[j], menu[m].etelek[n].etelNev);
+
+                                int pontok = 40 - strlen(menu[m].etelek[n].etelNev) - 3;
+                                for (int p = 0; p < pontok; p++)
+                                {
+                                    printf(".");
+                                }
+                                printf("%d Ft\n", etelAr);
+                                osszeg += etelAr;
+                            }
+                            tempIndex++;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    if (!vanRendeles)
+    {
+        printf(RED "Nincs rendeles ehhez az asztalhoz!\n" WHITE);
+        system("pause");
+        return 0;
+    }
+
+    printf("________________________________________\n");
+    printf(LIGHT_YELLOW "Vegosszeg:");
+    int pontok = 30;
+    for (int i = 0; i < pontok; i++)
+    {
+        printf(".");
+    }
+    printf("%d Ft\n" WHITE, osszeg);
+
+    system("pause");
     return 0;
 }
 

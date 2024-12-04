@@ -65,10 +65,10 @@ int fomenu(Asztal **asztalok, int *asztalokHossz, Etelcsoport **menu, int **mere
 
         return 1;
     case 4:
-        rendelesFelvetel();
+        rendelesFelvetel(rendelesek, rendelesekHossz, *menu, *meretek, *meretekHossz);
         return 1;
     case 5:
-        szamlaKiir();
+        szamlaKiir(*rendelesek, *rendelesekHossz, *menu, *meretek, *meretekHossz);
         return 1;
     case 6:
         foglaltsagiTerkepKiir(*asztalok, *asztalokHossz);

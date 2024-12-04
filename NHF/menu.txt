@@ -1,6 +1,11 @@
-1
+3
 ecet
-1
+desszertek
+szuflek
+2
 0
 ecetes tojas
 102
+0
+ecetes majomszosz
+214
