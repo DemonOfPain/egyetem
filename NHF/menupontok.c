@@ -12,10 +12,17 @@
 #define GREEN "\033[0;32m"
 #define LIGHT_GREEN "\033[38;2;224;255;224m"
 
+// alpontok fuggvenyeinek deklaralasa
+int etelcsoportFelvete(Etelcsoport **menu, int **meretek, int *meretekHossz);
+int etelFelvetele(Etelcsoport **menu, int **meretek, int *meretekHossz);
+
+// fopontok fuggvenyei
 int asztalokMegadasa(Asztal **asztalok, int *asztalokHossz)
 {
     system("@cls");
     printf(YELLOW "Asztalok megadasa\n" WHITE);
+    printf("Uj asztal megadasahoz add meg a kovetkezoket: x y fo, ahol x es y a koordinatak, a fo pedig az asztal max letszama.\n");
+    printf("Kilepeshez ird be hogy -1 -1 -1.\n");
 
     int x;
     int y;
@@ -26,6 +33,10 @@ int asztalokMegadasa(Asztal **asztalok, int *asztalokHossz)
         return 1;
     }
 
+    if (x == -1 && y == -1 && fo == -1)
+    {
+        return 0;
+    }
     if (x < 0 || y < 0 || fo < 1)
     {
         return 1;
@@ -103,6 +114,7 @@ int kajaMenu(Etelcsoport **menu, int **meretek, int *meretekHossz)
 
     switch (valasztas)
     {
+    // menu kiir
     case 1:
         if (!*menu)
         {
@@ -123,130 +135,18 @@ int kajaMenu(Etelcsoport **menu, int **meretek, int *meretekHossz)
         system("pause");
         return 0;
 
+    // Etelcsoport megadasa
     case 2:
-        system("@cls");
-        printf(YELLOW "Etelcsoportok megadasa\n" WHITE);
-        printf("(ird be hogy \"kilep\" a kilepeshez)\n");
-        char beolvasottCsop[50 + 1];
+        return etelcsoportFelvete(menu, meretek, meretekHossz);
 
-        int safetyGuard = 0;
-        while (safetyGuard < 500)
-        {
-            fflush(stdin);
-            printf("\nAdd meg az etelcsoport nevet: ");
-
-            if (fgets(beolvasottCsop, sizeof(beolvasottCsop), stdin) != NULL)
-            {
-                if (beolvasottCsop[strlen(beolvasottCsop) - 1] == '\n')
-                {
-                    beolvasottCsop[strlen(beolvasottCsop) - 1] = '\0';
-                }
-
-                if (strcmp(beolvasottCsop, "kilep") == 0)
-                {
-                    return 0;
-                }
-
-                int letezik = 0;
-                for (int i = 0; i < *meretekHossz; i++)
-                {
-                    if (strcmp((*menu)[i].etelcsoportNev, beolvasottCsop) == 0)
-                    {
-                        printf(RED "Ez az etelcsoport mar letezik!\n" WHITE);
-                        letezik = 1;
-                        system("pause");
-                        break;
-                    }
-                }
-                if (letezik)
-                {
-                    continue;
-                }
-
-                *menu = *menu ? realloc(*menu, (*meretekHossz + 1) * sizeof(Etelcsoport)) : malloc(sizeof(Etelcsoport));
-                *meretek = *meretek ? realloc(*meretek, (*meretekHossz + 1) * sizeof(int)) : malloc(sizeof(int));
-
-                strcpy((*menu)[*meretekHossz].etelcsoportNev, beolvasottCsop);
-                (*menu)[*meretekHossz].etelek = NULL;
-                (*meretek)[*meretekHossz] = 0;
-                (*meretekHossz)++;
-
-                printf(GREEN "Etelcsoport sikeresen hozzaadva!\n" WHITE);
-                if (kajamenuMent(*menu, *meretek, *meretekHossz))
-                {
-                    printf(RED "Menu mentese sikertelen!" WHITE);
-                }
-            }
-            safetyGuard++;
-        }
-        return 0;
-
+    // Etel megadasa
     case 3:
-        if (!*menu)
-        {
-            printf(RED "Nincsen meg menu!\n" WHITE);
-            system("pause");
-            return 0;
-        }
-        system("@cls");
-        printf(YELLOW "Etelcsoportok:\n" WHITE);
-        for (int i = 0; i < *meretekHossz; i++)
-        {
-            printf("%d. %s\n" WHITE, i + 1, (*menu)[i].etelcsoportNev);
-        }
-        printf("\nValaszd ki az etelcsoportot (-1 a kilepeshez): ");
+        return etelFelvetele(menu, meretek, meretekHossz);
 
-        int csopId;
-        scanf("%d", &csopId);
-        csopId--;
-        fflush(stdin);
-
-        if (csopId < 0 || csopId >= *meretekHossz)
-        {
-            printf(RED "Ervenytelen valasztas!\n" WHITE);
-            system("pause");
-            return 0;
-        }
-
-        char etelNev[50 + 1];
-        int ar = 0;
-        printf("Add meg az etel nevet: ");
-
-        if (fgets(etelNev, sizeof(etelNev), stdin) != NULL)
-        {
-            if (etelNev[strlen(etelNev) - 1] == '\n')
-            {
-                etelNev[strlen(etelNev) - 1] = '\0';
-            }
-
-            printf("Add meg az etel arat: ");
-            scanf("%d", &ar);
-            if (ar <= 0)
-            {
-                return 1;
-            }
-
-            (*menu)[csopId].etelek = (*menu)[csopId].etelek ? realloc((*menu)[csopId].etelek, ((*meretek)[csopId] + 1) * sizeof(Etel)) : malloc(sizeof(Etel));
-
-            strcpy((*menu)[csopId].etelek[(*meretek)[csopId]].etelNev, etelNev);
-            (*menu)[csopId].etelek[(*meretek)[csopId]].ar = ar;
-            (*meretek)[csopId]++;
-
-            printf(GREEN "Etel sikeresen hozzaadva!\n" WHITE);
-            fflush(stdin);
-            if (kajamenuMent(*menu, *meretek, *meretekHossz))
-            {
-                printf(RED "Menu mentese sikertelen!" WHITE);
-            }
-            system("pause");
-        }
-        else
-        {
-            return 1;
-        }
-        return 0;
-
+    // kilep
     case 4:
+        return 0;
+    default:
         return 0;
     }
 }
@@ -319,12 +219,12 @@ int rendelesFelvetel(Rendeles **rendelesek, int *rendelesekHossz, Etelcsoport *m
 
     Rendeles ujRendeles;
     ujRendeles.asztalId = asztalId;
-    ujRendeles.etelek = malloc((osszEtelSzam + 1) * sizeof(int)); // +1 for sentinel
+    ujRendeles.etelek = malloc((osszEtelSzam + 1) * sizeof(int));
     ujRendeles.db = malloc((osszEtelSzam + 1) * sizeof(int));
 
-    for (int i = 0; i < osszEtelSzam + 1; i++) // Initialize everything including sentinel
+    for (int i = 0; i < osszEtelSzam + 1; i++)
     {
-        ujRendeles.etelek[i] = -1; // All elements start as sentinel
+        ujRendeles.etelek[i] = -1;
         ujRendeles.db[i] = 0;
     }
 
@@ -564,5 +464,133 @@ int foglaltsagiTerkepKiir(Asztal *asztalok, int asztalokHossz)
     }
 
     system("pause");
+    return 0;
+}
+
+// alpontok fuggvenyei
+int etelcsoportFelvete(Etelcsoport **menu, int **meretek, int *meretekHossz)
+{
+    system("@cls");
+    printf(YELLOW "Etelcsoportok megadasa\n" WHITE);
+    printf("(ird be hogy \"kilep\" a kilepeshez)\n");
+    char beolvasottCsop[50 + 1];
+
+    int safetyGuard = 0;
+    while (safetyGuard < 500)
+    {
+        fflush(stdin);
+        printf("\nAdd meg az etelcsoport nevet: ");
+
+        if (fgets(beolvasottCsop, sizeof(beolvasottCsop), stdin) != NULL)
+        {
+            if (beolvasottCsop[strlen(beolvasottCsop) - 1] == '\n')
+            {
+                beolvasottCsop[strlen(beolvasottCsop) - 1] = '\0';
+            }
+
+            if (strcmp(beolvasottCsop, "kilep") == 0)
+            {
+                return 0;
+            }
+
+            int letezik = 0;
+            for (int i = 0; i < *meretekHossz; i++)
+            {
+                if (strcmp((*menu)[i].etelcsoportNev, beolvasottCsop) == 0)
+                {
+                    printf(RED "Ez az etelcsoport mar letezik!\n" WHITE);
+                    letezik = 1;
+                    system("pause");
+                    break;
+                }
+            }
+            if (letezik)
+            {
+                continue;
+            }
+
+            *menu = *menu ? realloc(*menu, (*meretekHossz + 1) * sizeof(Etelcsoport)) : malloc(sizeof(Etelcsoport));
+            *meretek = *meretek ? realloc(*meretek, (*meretekHossz + 1) * sizeof(int)) : malloc(sizeof(int));
+
+            strcpy((*menu)[*meretekHossz].etelcsoportNev, beolvasottCsop);
+            (*menu)[*meretekHossz].etelek = NULL;
+            (*meretek)[*meretekHossz] = 0;
+            (*meretekHossz)++;
+
+            printf(GREEN "Etelcsoport sikeresen hozzaadva!\n" WHITE);
+            if (kajamenuMent(*menu, *meretek, *meretekHossz))
+            {
+                printf(RED "Menu mentese sikertelen!" WHITE);
+            }
+        }
+        safetyGuard++;
+    }
+    return 0;
+}
+
+int etelFelvetele(Etelcsoport **menu, int **meretek, int *meretekHossz)
+{
+    if (!*menu)
+    {
+        printf(RED "Nincsen meg menu!\n" WHITE);
+        system("pause");
+        return 0;
+    }
+    system("@cls");
+    printf(YELLOW "Etelcsoportok:\n" WHITE);
+    for (int i = 0; i < *meretekHossz; i++)
+    {
+        printf("%d. %s\n" WHITE, i + 1, (*menu)[i].etelcsoportNev);
+    }
+    printf("\nValaszd ki az etelcsoportot (-1 a kilepeshez): ");
+
+    int csopId;
+    scanf("%d", &csopId);
+    csopId--;
+    fflush(stdin);
+
+    if (csopId < 0 || csopId >= *meretekHossz)
+    {
+        printf(RED "Ervenytelen valasztas!\n" WHITE);
+        system("pause");
+        return 0;
+    }
+
+    char etelNev[50 + 1];
+    int ar = 0;
+    printf("Add meg az etel nevet: ");
+
+    if (fgets(etelNev, sizeof(etelNev), stdin) != NULL)
+    {
+        if (etelNev[strlen(etelNev) - 1] == '\n')
+        {
+            etelNev[strlen(etelNev) - 1] = '\0';
+        }
+
+        printf("Add meg az etel arat: ");
+        scanf("%d", &ar);
+        if (ar <= 0)
+        {
+            return 1;
+        }
+
+        (*menu)[csopId].etelek = (*menu)[csopId].etelek ? realloc((*menu)[csopId].etelek, ((*meretek)[csopId] + 1) * sizeof(Etel)) : malloc(sizeof(Etel));
+
+        strcpy((*menu)[csopId].etelek[(*meretek)[csopId]].etelNev, etelNev);
+        (*menu)[csopId].etelek[(*meretek)[csopId]].ar = ar;
+        (*meretek)[csopId]++;
+
+        printf(GREEN "Etel sikeresen hozzaadva!\n" WHITE);
+        fflush(stdin);
+        if (kajamenuMent(*menu, *meretek, *meretekHossz))
+        {
+            printf(RED "Menu mentese sikertelen!" WHITE);
+        }
+        system("pause");
+    }
+    else
+    {
+        return 1;
+    }
     return 0;
 }

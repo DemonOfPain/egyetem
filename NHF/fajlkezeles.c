@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "debugmalloc.h"
+// #include "debugmalloc.h"
 #include "structs.h"
 
 #define YELLOW "\033[0;33m"

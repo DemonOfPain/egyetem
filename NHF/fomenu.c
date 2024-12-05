@@ -75,5 +75,8 @@ int fomenu(Asztal **asztalok, int *asztalokHossz, Etelcsoport **menu, int **mere
         return 1;
     case 7:
         return 0;
+    default:
+        printf(RED "\nHelytelen menupont!\n" WHITE);
+        return 0;
     }
 }

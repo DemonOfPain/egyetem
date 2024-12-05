@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <windows.h>
 
-#include "debugmalloc.h"
+// #include "debugmalloc.h"
 #include "fomenu.h"
 #include "fajlkezeles.h"
 #include "structs.h"
@@ -31,6 +31,7 @@ int main()
             printf(GREEN "Elmentett asztalok sikeresen beolvasva!\n" WHITE);
         }
     }
+    fflush(stdin);
 
     // menu
     int *meretek = NULL;
@@ -48,6 +49,7 @@ int main()
             printf(GREEN "Elmentett menu sikeresen beolvasva!\n" WHITE);
         }
     }
+    fflush(stdin);
     system("pause");
 
     // rendelesek

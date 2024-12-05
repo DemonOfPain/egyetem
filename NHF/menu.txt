@@ -1,11 +1,15 @@
-3
+4
 ecet
 desszertek
 szuflek
-2
+ownrf
+3
 0
 ecetes tojas
 102
 0
 ecetes majomszosz
 214
+3
+oien
+1345

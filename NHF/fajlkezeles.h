@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "debugmalloc.h"
+// #include "debugmalloc.h"
 #include "structs.h"
 
 Asztal *asztalokBeolvas(int *listaHossz);

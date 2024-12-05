@@ -12,4 +12,7 @@ int asztalFoglalasok(Asztal *asztalok, int asztalokHossz);
 int rendelesFelvetel(Rendeles **rendelesek, int *rendelesekHossz, Etelcsoport *menu, int *meretek, int meretekHossz);
 int szamlaKiir(Rendeles *rendelesek, int rendelesekHossz, Etelcsoport *menu, int *meretek, int meretekHossz);
 int foglaltsagiTerkepKiir(Asztal *asztalok, int asztalokHossz);
+
+int etelcsoportFelvete(Etelcsoport **menu, int **meretek, int *meretekHossz);
+int etelFelvetele(Etelcsoport **menu, int **meretek, int *meretekHossz);
 #endif
