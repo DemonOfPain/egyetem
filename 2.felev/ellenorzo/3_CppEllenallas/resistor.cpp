@@ -12,3 +12,32 @@
  */
 
 #include "resistor.h"
+
+double Resistor::defR = 53; 
+
+Resistor::Resistor(){
+    this->R = defR;
+}
+
+Resistor::Resistor(double r){
+    this->R = r;
+}
+
+void Resistor::setDef(double r){
+    defR = r;
+}
+
+Resistor Resistor::operator+(const Resistor& r) const{
+    return Resistor(this->getR() + r.getR());
+}
+
+Resistor Resistor::operator%(const Resistor& r) const{
+    return Resistor(1/(1/this->getR() + 1/r.getR()));
+}
+
+Resistor operator*(int n, const Resistor& r){
+    if(!(n > 0)){
+        throw "HND2AH";
+    }
+    return Resistor(n * r.getR());
+}

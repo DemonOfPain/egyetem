@@ -9,15 +9,13 @@
  * Ohmikus ellenállás
  */
 
-#define NO_STATIC
 
 class Resistor {
     double R;              	// az ellenállás értéke ohmban
-#ifndef NO_STATIC
     static double defR;  	// ellenállások alapértelmezett értéke ohmban
                             // ezt a statikus adattagot külön meg kell valósítani
                             // az osztályon kívül.
-#endif
+
 public:
 
     /// Konstruktor.
@@ -28,11 +26,9 @@ public:
     /// @param r - ellenállás értéke [ohm]
     Resistor(double r);
 
-#ifndef NO_STATIC
     /// Alapértelmezett ellenállásérték beállítása
     /// @param r - ellenállás értéke [ohm]
     static void setDef(double r);
-#endif
 
     /// Ellenállás értékének lekérdezése.
     /// @return - ellenállás értéke [ohm]
