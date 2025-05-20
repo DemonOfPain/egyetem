@@ -5,6 +5,7 @@
  * This file contains the implementation of methods declared in the FamilyFilm class.
  */
 
+#include "memtrace.h"
 #include "familyFilm.h"
 #include <cstring>
 #include <iostream>

@@ -5,6 +5,7 @@
  * This file contains the implementation of methods declared in the Application class.
  */
 
+#include "memtrace.h"
 #include "application.h"
 #include <cstring>
 #include <iostream>

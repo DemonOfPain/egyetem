@@ -4,20 +4,19 @@
 CXX = g++
 
 # Compiler flags
-CXXFLAGS = -Wall -Wextra -Werror -pedantic -std=c++11
+CXXFLAGS = -Wall -Wextra -Werror -pedantic -std=c++11 -DMEMTRACE
 
 # Source files
-SOURCES = main.cpp application.cpp filmManager.cpp film.cpp familyFilm.cpp documentaryFilm.cpp
+SOURCES = main.cpp application.cpp filmManager.cpp film.cpp familyFilm.cpp documentaryFilm.cpp memtrace.cpp
 
 # Object files
 OBJECTS = $(SOURCES:.cpp=.o)
-TEST_OBJECTS = filmManager.o film.o familyFilm.o documentaryFilm.o
 
 # Executable names
 EXECUTABLE = filmtar
 
 # Default target
-all: $(EXECUTABLE) $(TEST_EXECUTABLE)
+all: $(EXECUTABLE)
 
 # Main program
 $(EXECUTABLE): $(OBJECTS)
@@ -29,7 +28,7 @@ $(EXECUTABLE): $(OBJECTS)
 
 # Clean
 clean:
-	rm -f $(OBJECTS) $(TEST_OBJECTS) $(EXECUTABLE) $(TEST_EXECUTABLE)
+	rm -f $(OBJECTS) $(EXECUTABLE)
 
 # Dependencies
 main.o: main.cpp application.h

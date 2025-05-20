@@ -5,6 +5,7 @@
  * This file contains the implementation of methods declared in the Film class.
  */
 
+#include "memtrace.h"
 #include "film.h"
 #include "documentaryFilm.h"
 #include "familyFilm.h"

@@ -5,6 +5,7 @@
  * This file contains the implementation of methods declared in the DocumentaryFilm class.
  */
 
+#include "memtrace.h"
 #include "documentaryFilm.h"
 #include <cstring>
 #include <iostream>
