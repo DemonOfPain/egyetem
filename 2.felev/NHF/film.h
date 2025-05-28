@@ -6,6 +6,7 @@
 #ifndef FILM_H
 #define FILM_H
 
+#include "memtrace.h"
 #include <exception>
 #include <fstream>
 #include <iostream>

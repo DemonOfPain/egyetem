@@ -8,6 +8,7 @@
 #include "filmManager.h"
 #include "documentaryFilm.h"
 #include "familyFilm.h"
+#include "memtrace.h"
 #include <cstdlib>
 #include <cstring>
 #include <iostream>

@@ -7,6 +7,7 @@
 #define APPLICATION_H
 
 #include "filmManager.h"
+#include "memtrace.h"
 #include <iostream>
 #include <sstream>
 #include <string>

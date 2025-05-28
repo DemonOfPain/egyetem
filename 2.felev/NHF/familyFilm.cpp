@@ -6,6 +6,7 @@
  */
 
 #include "familyFilm.h"
+#include "memtrace.h"
 #include <cstring>
 #include <iostream>
 

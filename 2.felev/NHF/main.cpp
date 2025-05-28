@@ -8,6 +8,8 @@
  */
 
 #include "application.h"
+#include "memtrace.h"
+#include <cstring>
 #include <iostream>
 
 /**

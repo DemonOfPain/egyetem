@@ -21,14 +21,16 @@
 
 #include "nem_oo.h"
 namespace sajat {
+
     template <typename T>
-    T max(T a, T b){
-        // return a > b ? a : b;
-        return a;
+    T max(T a, T b) {
+        return (a > b) ? a : b;
     }
 
+    template <>
+    Komplex max<Komplex>(Komplex a, Komplex b) {
+        return (absKomplex(a) > absKomplex(b)) ? a : b;
+    }
 }
 
-
 #endif // _MAX_HPP
-

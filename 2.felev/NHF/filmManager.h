@@ -10,6 +10,7 @@
 #define FILMMANAGER_H
 
 #include "film.h"
+#include "memtrace.h"
 #include <fstream>
 #include <string>
 

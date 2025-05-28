@@ -7,6 +7,7 @@
 #define FAMILYFILM_H
 
 #include "film.h"
+#include "memtrace.h"
 #include <fstream>
 
 /**
